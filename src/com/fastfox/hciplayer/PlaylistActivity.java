@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -127,16 +128,28 @@ public class PlaylistActivity extends FragmentActivity implements
 		}
 
 		@Override
-		public ListFragment getItem(int position) {
+		public Fragment getItem(int position) {
 			// getItem is called to instantiate the fragment for the given page.
 			// Return a DummySectionFragment (defined as a static inner class
 			// below) with the page number as its lone argument.
-			ListFragment fragment = new DummySectionFragment();
-			Bundle args = new Bundle();
-			//Log.d("getItem", "" + position);
-			args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position);
-			fragment.setArguments(args);
+			Log.d("getItem", "" + position);
+			Fragment fragment;
+			if (position == 0) {
+				fragment = new PlaylistFragment();
+				
+				
+			} else if (position == 1) {
+				/* fragment = new DummySectionFragment();
+				Bundle args = new Bundle();
+			
+				args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position);
+				fragment.setArguments(args); */
+				fragment = new SearchFragment();
+			} else { // if (position == 2) {
+				fragment = new SuggestionFragment();
+			}
 			return fragment;
+			
 		}
 
 		@Override
@@ -158,13 +171,54 @@ public class PlaylistActivity extends FragmentActivity implements
 			return null;
 		}
 	}
+	
+	public static class PlaylistFragment extends Fragment {	
+		private String TAG = "PlaylistFragment";
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {       
+	        View V = inflater.inflate(R.layout.playlist, container, false);
+	        
+	        ListView playlistView = (ListView) V.findViewById(R.id.playListView);
+	        String[] tracks = new String[] { "Playlist", "doei" };
+	        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, tracks);
+	        playlistView.setAdapter(adapter);
+	        
+			return V;
+		}
+	}
+	
+	public static class SearchFragment extends Fragment {
+		private String TAG = "SearchFragment";
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {       
+	        View V = inflater.inflate(R.layout.search, container, false);
+
+			return V;
+		}
+	}
+	
+	public static class SuggestionFragment extends Fragment {
+		private String TAG = "SuggestionFragment";
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {       
+	        View V = inflater.inflate(R.layout.suggestion, container, false);
+	        
+	        ListView playlistView = (ListView) V.findViewById(R.id.suggestionListView);
+	        String[] tracks = new String[] { "Hoi", "doei", "Suggestion" };
+	        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, tracks);
+	        playlistView.setAdapter(adapter);
+	        
+			return V;
+		}
+
+	}
 
 	/**
 	 * A dummy fragment representing a section of the app, but that simply
 	 * displays dummy text.
 	 */
 	//public static class DummySectionFragment extends Fragment {
-	public static class DummySectionFragment extends ListFragment {
+	public static class DummySectionFragment extends Fragment {
 		/**
 		 * The fragment argument representing the section number for this
 		 * fragment.
@@ -203,12 +257,16 @@ public class PlaylistActivity extends FragmentActivity implements
 				list.add("Suggestions");
 			}
 			
+			return inflater.inflate(R.layout.playlist, container, false);
+			
+			/*
 			ListAdapter myListAdapter = new ArrayAdapter<String>(
 				    getActivity(),
 				    android.R.layout.simple_list_item_1,
 				    list);
 			setListAdapter(myListAdapter);			
 			return inflater.inflate(R.layout.playlist, container, false);
+			*/
 			//String[] tracks = new String[] { "Hoi", "doei" };
 	        //ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, tracks);
 	        
